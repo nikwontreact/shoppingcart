@@ -1,9 +1,12 @@
 import React from "react";
 import { useContext } from "react";
 import { ProductContext } from "../context/ProductContext";
+import { CartContext } from "../context/CartContext";
 
 const ProductCard = () => {
   const { productData } = useContext(ProductContext);
+  const { addToCart } = useContext(CartContext);
+
   console.log(productData.products);
   return (
     <div className="flex bg-amber-300 flex-col items-center p-4 rounded-lg shadow-md">
@@ -16,7 +19,12 @@ const ProductCard = () => {
           />
           <h2 className="text-lg font-semibold">{product.title}</h2>
           <p className="text-gray-700">${product.price}</p>
-          <button className="bg-blue-500 hover: outline-2 hover: outline-cyan-50">
+          <button
+            className="bg-blue-500 hover: outline-2 hover: outline-cyan-50"
+            onClick={() => {
+              addToCart(product), console.log("Added to cart", product);
+            }}
+          >
             Add to cart
           </button>
         </div>
