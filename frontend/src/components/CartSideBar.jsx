@@ -1,105 +1,49 @@
-import React from "react";
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { IoClose } from "react-icons/io5";
+import React, { useContext } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { CartContext } from '../context/CartContext';
 
-const CartSideBar = () => {
-  const {
-    cartItems = [],
-    addToCart,
-    removeFromCart,
-    deleteFromCart,
-  } = useContext(CartContext);
 
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
-  if (!cartItems.length) {
-    return (
-      <aside className="bg-linear-to-b from-pink-500 to-teal-400  h-full  p-4 flex flex-col justify-start">
-        <div className="flex justify-between items-center text-xl text-gray-800">
-          <h1 className=" ">Your cart</h1>
-          <IoClose size={18} className="text-gray-800" />
-        </div>
-        <hr className="text-gray-400 mt-5" />
-        <div className="flex text-center justify-center items-center h-full">
-          <p className="text-lg text-gray-900  ">Your cart is empty.</p>
-        </div>
-      </aside>
-    );
-  }
+const CartSideBar = ({ onClose }) => {
+  const { cartItems = [], addToCart, removeFromCart, deleteFromCart } = useContext(CartContext);
+  const totalPrice = cartItems.reduce((t, i) => t + i.price * i.quantity, 0);
+  const fmt = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
 
   return (
-    <aside className="bg-linear-to-b from-pink-500 to-teal-400 h-full w-full p-4 flex flex-col justify-start overflow-y-auto">
-      <div className="flex justify-between items-center text-xl text-gray-800">
-        <h1 className=" ">Your cart</h1>
-        <IoClose size={18} className="text-gray-800" />
+    <aside className="h-full w-full sm:w-[350px] bg-linear-to-b from-pink-500 to-teal-400 p-4 flex flex-col" role="dialog" aria-modal="true" aria-label="Shopping cart">
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Your cart</h2>
+        <button onClick={onClose} aria-label="Close cart" className="p-2">
+          <IoClose size={20} />
+        </button>
       </div>
 
-      <hr className="text-gray-400 mt-5 mb-10" />
-      {/* display cart items */}
-      <div className="flex flex-col gap-4">
-        {cartItems.map((item) => {
-          const imgSrc = item.images?.[0] || "/placeholder.png";
-          const title = item.title ?? item.name ?? "Product";
-          return (
-            <div
-              key={item.id}
-              className="border-b-2 border-gray-300 p-4 flex items-center gap-4"
-            >
-              <img
-                src={imgSrc}
-                alt={title}
-                className="object-contain h-20 w-20"
-              />
+      <div className="mt-4 flex-1 overflow-y-auto">
+        {cartItems.length === 0 ? (
+          <div className="h-full flex items-center justify-center">Your cart is empty.</div>
+        ) : (
+          cartItems.map(item => (
+            <div key={item.id} className="flex gap-3 items-center border-b py-3">
+              <img src={item.images?.[0] || '/placeholder.png'} alt={item.title} className="h-16 w-16 object-contain" loading="lazy"/>
               <div className="flex-1">
-                <h2 className="text-lg font-semibold">{title}</h2>
-                <p>Price: ${item.price}</p>
-                <p>Quantity: {item.quantity}</p>
+                <div className="font-medium">{item.title}</div>
+                <div>Qty: {item.quantity} • {fmt.format(item.price)}</div>
               </div>
-              <div className="flex flex-col items-center space-y-2">
-                <button
-                  type="button"
-                  className="bg-amber-300 text-2xl p-2"
-                  onClick={() => addToCart(item)}
-                  aria-label={`Increase quantity for ${title}`}
-                >
-                  +
-                </button>
-                <button
-                  type="button"
-                  className="bg-amber-300 text-2xl p-2"
-                  onClick={() => removeFromCart(item)}
-                  aria-label={`Decrease quantity for ${title}`}
-                >
-                  -
-                </button>
-                <button
-                  type="button"
-                  className="bg-red-500 text-white p-2 text-sm"
-                  onClick={() => deleteFromCart(item.id)}
-                  aria-label={`Remove ${title}`}
-                >
-                  Delete
-                </button>
-              </div>
-              <div className="w-full mt-4">
-                <strong>Total: </strong> ${item.price * item.quantity}
+              <div className="flex flex-col gap-2">
+                <button onClick={() => addToCart(item)} aria-label="Increase">+</button>
+                <button onClick={() => removeFromCart(item)} aria-label="Decrease">-</button>
+                <button onClick={() => deleteFromCart(item.id)} aria-label="Remove" className="text-sm text-white bg-red-600 px-2 rounded">Delete</button>
               </div>
             </div>
-          );
-        })}
+          ))
+        )}
       </div>
 
-      {/* Cart total summary */}
-      <div className="mt-6 pt-4 border-t-2 border-gray-300">
-        <h2 className="text-lg font-semibold">Cart Summary</h2>
-        <p className="mt-2">
-          <strong>Subtotal:</strong> ${totalPrice.toFixed(2)}
-        </p>
-        {/* Add checkout button or other actions here */}
+      <div className="mt-4 border-t pt-4">
+        <div className="flex justify-between">
+          <span className="font-semibold">Subtotal</span>
+          <span className="font-semibold">{fmt.format(totalPrice)}</span>
+        </div>
+        <button className="mt-3 w-full py-2 bg-green-600 text-white rounded">Checkout</button>
       </div>
     </aside>
   );

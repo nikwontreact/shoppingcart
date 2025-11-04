@@ -1,15 +1,18 @@
-import React, {  useState, useContext } from "react";
-import 
+import React, { useState } from "react";
+import { SideBarContext } from "./SideBarContext";
 
-
-export const SidebarProvider = ({ children }) => {
+export const SideBarProvider = ({ children }) => {
   const [cartIsOpen, setCartIsOpen] = useState(false);
 
+  const openCart = () => setCartIsOpen(true);
+  const closeCart = () => setCartIsOpen(false);
+  const toggleCart = () => setCartIsOpen((prev) => !prev);
+
   return (
-    <SidebarContext.Provider value={{ cartIsOpen, setCartIsOpen }}>
+    <SideBarContext.Provider
+      value={{ cartIsOpen, openCart, closeCart, toggleCart }}
+    >
       {children}
-    </SidebarContext.Provider>
+    </SideBarContext.Provider>
   );
 };
-
-export const useSidebar = () => useContext(SidebarContext);

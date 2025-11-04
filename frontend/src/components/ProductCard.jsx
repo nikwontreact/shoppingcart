@@ -1,39 +1,28 @@
 // ProductCard.jsx
 import React, { useContext } from "react";
-import { ProductContext } from "../context/ProductContext";
 import { CartContext } from "../context/CartContext";
 
-const ProductCard = () => {
-  const { productData } = useContext(ProductContext);
+const ProductCard = ({ product }) => {
   const { addToCart } = useContext(CartContext);
-
   return (
-    <>
-      {productData.map((product) => (
-        <div
-          key={product.id}
-          className="bg-blur flex flex-col items-center p-4 rounded-lg shadow-md outline outline-"
-        >
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            className="object-cover h-48 w-48 mb-4 rounded"
-          />
-          <h2 className="text-lg font-semibold mb-1">{product.title}</h2>
-          <p className="text-gray-700 mb-4">${product.price}</p>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            onClick={() => {
-              addToCart(product);
-              console.log("Added to cart", product);
-            }}
-          >
-            Add to cart
-          </button>
-        </div>
-      ))}
-    </>
+    <article className="bg-white/80 p-3 rounded-lg shadow hover:shadow-lg flex flex-col items-center">
+      <img
+        src={product.images?.[0] || "/placeholder.png"}
+        alt={`${product.title} image`}
+        className="h-40 w-full object-cover rounded mb-3"
+        loading="lazy"
+      />
+      <h3 className="text-sm font-semibold text-center">{product.title}</h3>
+      <p className="text-gray-700 mt-1">{product.brand}</p>
+      <p className="mt-2 font-medium">{product.price}</p>
+      <button
+        onClick={() => addToCart(product)}
+        className="mt-3 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+      >
+        Add to cart
+      </button>
+    </article>
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

@@ -4,6 +4,7 @@ import { CiShoppingCart } from "react-icons/ci";
 import CartSideBar from "./CartSideBar";
 
 const Navbar = () => {
+  
   const [cartIsOpen, setCartIsOpen] = useState(false);
   return (
     <>

@@ -1,3 +1,3 @@
 import React, { createContext } from "react";
 
-const SidebarContext = createContext();
+export const SideBarContext = createContext();
