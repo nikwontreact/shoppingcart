@@ -1,5 +1,101 @@
 @import "tailwindcss";
 
-* {
-  font-family: sans-serif;
+@theme {
+  /* Brand Colors */
+  --color-primary-50: #fff5f7;
+  --color-primary-100: #ffdbe6;
+  --color-primary-300: #ff93c2;
+  --color-primary-500: #ff5aa8;
+  --color-primary-700: #e8438f;
+
+  --color-accent-50: #f0fdfa;
+  --color-accent-300: #6ee7b7;
+  --color-accent-500: #10b981;
+
+  /* Neutral Palette */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-300: #d4d4d8;
+  --color-neutral-500: #71717a;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-900: #18181b;
+
+  /* Shadows & Radii */
+  --shadow-card: 0 6px 18px rgba(16, 24, 40, 0.06);
+  --shadow-soft: 0 8px 20px rgba(16, 24, 40, 0.08);
+  --radius-xl: 1rem;
+
+  /* Typography scale (optional) */
+  --font-display: "Poppins", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* 🧱 Base layer: global resets or typography */
+@layer base {
+  body {
+    @apply bg-gradient-to-b from-primary-300 to-accent-300 text-neutral-900 font-body antialiased min-h-screen;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  ::selection {
+    @apply bg-primary-500 text-white;
+  }
+}
+
+/* 🧩 Component layer: reusable UI styles */
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition focus:outline-none focus:ring-2 focus:ring-primary-300;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-300;
+  }
+
+  .btn-accent {
+    @apply bg-accent-500 text-white hover:bg-accent-300;
+  }
+
+  .btn-outline {
+    @apply border border-neutral-300 text-neutral-700 hover:bg-neutral-100;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-white/95 rounded-xl shadow-card p-4 transition-transform hover:-translate-y-5;
+  }
+
+  /* Section container */
+  .section {
+    @apply container mx-auto px-4 py-6;
+  }
+
+  /* Gradient background helper */
+  .bg-brand {
+    @apply bg-gradient-to-b from-primary-300 to-accent-300;
+  }
+}
+
+/* 🔧 Utilities layer: if you want to extend behavior (optional) */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .rounded-xl {
+    border-radius: var(--radius-xl);
+  }
 }

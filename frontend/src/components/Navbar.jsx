@@ -1,37 +1,55 @@
 // Navbar.jsx
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { CiShoppingCart } from "react-icons/ci";
-import CartSideBar from "./CartSideBar";
+import { CartContext } from "../context/CartContext";
+import { motion } from "motion/react";
 
-const Navbar = () => {
-  
-  const [cartIsOpen, setCartIsOpen] = useState(false);
+const Navbar = ({ onOpenCart }) => {
+  const { cartItems } = useContext(CartContext);
+
+  const totalQty = cartItems.reduce((s, i) => s + (i.quantity || 0), 0);
+
   return (
-    <>
-      <nav className="h-16 bg-pink-100 sticky top-0 flex items-center px-4 justify-between shadow-md z-50 select-none ">
-        <h1 className="text-2xl font-bold text-gray-800 ">ShoppingCart</h1>
-        <CiShoppingCart
-          size={28}
-          color="black"
-          className="cursor-pointer"
-          onClick={() => setCartIsOpen(!cartIsOpen)}
-          aria-label="Toggle cart sidebar"
-        />
-      </nav>
+    <motion.header
+      className="sticky top-0 z-50 bg-linear-to-b from-primary-100 to-primary-50/40 backdrop-blur-sm"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring" }}
+    >
+      <nav className="container flex items-center justify-between h-14">
+        <div className="flex items-center gap-3">
+          <button
+            className="inline-flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded"
+            aria-label="Open menu"
+          >
+            {/* optional menu icon */}
+            <span className="sr-only">Open menu</span>
+          </button>
 
-      {cartIsOpen && (
-        <>
-          {/* Overlay for better UX */}
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-40"
-            onClick={() => setCartIsOpen(false)}
-          />
-          <div className="fixed top-0 right-0 h-full w-[350px] max-w-full z-50 shadow-lg">
-            <CartSideBar />
-          </div>
-        </>
-      )}
-    </>
+          <h1 className="text-lg font-semibold text-neutralSoft-700">
+            ShoppingCart
+          </h1>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onOpenCart}
+            aria-label="Open cart"
+            className="relative inline-flex items-center p-2 rounded-lg hover:bg-white/60 focus:outline-none focus:ring-2 focus:ring-primary-300"
+          >
+            <CiShoppingCart size={22} />
+            {totalQty > 0 && (
+              <span
+                className="absolute -top-1 -right-1 bg-pink-600 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                aria-live="polite"
+              >
+                {totalQty}
+              </span>
+            )}
+          </button>
+        </div>
+      </nav>
+    </motion.header>
   );
 };
 

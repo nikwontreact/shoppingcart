@@ -1,28 +1,54 @@
 // ProductCard.jsx
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { motion } from "motion/react";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useContext(CartContext);
+  const priceFmt = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  });
+
   return (
-    <article className="bg-white/80 p-3 rounded-lg shadow hover:shadow-lg flex flex-col items-center">
-      <img
-        src={product.images?.[0] || "/placeholder.png"}
-        alt={`${product.title} image`}
-        className="h-40 w-full object-cover rounded mb-3"
-        loading="lazy"
-      />
-      <h3 className="text-sm font-semibold text-center">{product.title}</h3>
-      <p className="text-gray-700 mt-1">{product.brand}</p>
-      <p className="mt-2 font-medium">{product.price}</p>
-      <button
-        onClick={() => addToCart(product)}
-        className="mt-3 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-      >
-        Add to cart
-      </button>
-    </article>
+    <motion.article className="bg-accent-50/60 rounded-xl shadow-card p-3 flex flex-col gap-3 "
+    
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}  
+    >
+      <div className="w-full aspect-4/3 overflow-hidden rounded-md bg-neutralSoft-50">
+        <img
+          src={product?.images?.[0] ?? "/placeholder.png"}
+          alt={product?.title ?? "Product image"}
+          className="object-cover w-full h-full"
+          loading="lazy"
+        />
+      </div>
+      <div className="flex-1">
+        <h3 className="text-sm font-semibold text-neutralSoft-700 truncate">
+          {product.title}
+        </h3>
+        <p className="text-xs text-neutralSoft-300 mt-1 line-clamp-2">
+          {product.description}
+        </p>
+      </div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-sm font-medium text-neutralSoft-700">
+          {priceFmt.format(product.price)}
+        </div>
+
+        <button
+          onClick={() => addToCart(product)}
+          className="inline-flex items-center px-3 py-1.5 rounded-lg bg-primary-500 text-black text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-300"
+          aria-label={`Add ${product.title} to cart`}
+        >
+          Add
+        </button>
+      </div>
+    </motion.article>
   );
 };
 
-export default React.memo(ProductCard);
+export default ProductCard;
