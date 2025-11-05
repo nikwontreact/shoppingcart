@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import { CiShoppingCart } from "react-icons/ci";
 import { CartContext } from "../context/CartContext";
 import { motion } from "motion/react";
+import logo from "../assets/logo.svg";
 
 const Navbar = ({ onOpenCart }) => {
   const { cartItems } = useContext(CartContext);
@@ -29,6 +30,8 @@ const Navbar = ({ onOpenCart }) => {
           <h1 className="text-lg font-semibold text-neutralSoft-700">
             ShoppingCart
           </h1>
+
+          <img src={logo} alt=""  className="object-contain  size-6"/>
         </div>
 
         <div className="flex items-center gap-3">
